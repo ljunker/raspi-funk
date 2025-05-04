@@ -6,7 +6,8 @@ import board
 import busio
 import serial
 from PIL import Image, ImageDraw, ImageFont
-from bluezero import peripheral
+from bluezero import peripheral, adapter
+
 
 #i2c = busio.I2C(board.SCL, board.SDA)
 #oled_width = 128
@@ -47,7 +48,8 @@ def ble_receive(value):
     last_message = value.decode("utf-8")
     update_display()
 
-ble_uart = peripheral.Peripheral(adapter_address=None, local_name='LoRaCom1')
+my_adapter = list(adapter.Adapter.available())[0]
+ble_uart = peripheral.Peripheral(adapter_address=my_adapter.address, local_name='LoRaCom1')
 ble_uart.add_service(srv_id=1, uuid="6E400001-B5A3-F393-E0A9-E50E24DCCA9E", primary=True)
 ble_uart.add_characteristic(srv_id=1, chr_id=1,
                             uuid="6E400002-B5A3-F393-E0A9-E50E24DCCA9E",
