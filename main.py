@@ -47,7 +47,7 @@ def ble_receive(value):
     last_message = value.decode("utf-8")
     update_display()
 
-ble_uart = peripheral.Peripheral(adapter_addr=None, local_name='LoRaCom1')
+ble_uart = peripheral.Peripheral(adapter_address=None, local_name='LoRaCom1')
 ble_uart.add_service(srv_id=1, uuid="6E400001-B5A3-F393-E0A9-E50E24DCCA9E", primary=True)
 ble_uart.add_characteristic(srv_id=1, chr_id=1,
                             uuid="6E400002-B5A3-F393-E0A9-E50E24DCCA9E",
