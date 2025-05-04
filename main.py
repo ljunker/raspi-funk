@@ -1,3 +1,4 @@
+import asyncio
 import threading
 import time
 
@@ -6,7 +7,7 @@ import board
 import busio
 import serial
 from PIL import Image, ImageDraw, ImageFont
-from bluezero import peripheral, adapter
+from bleak import BleakClient
 
 
 #i2c = busio.I2C(board.SCL, board.SDA)
@@ -43,27 +44,15 @@ def update_display():
     ]
     display_message(lines)
 
-def ble_receive(value):
-    global last_message
-    last_message = value.decode("utf-8")
-    update_display()
+async def ble_receive():
+    ble_address = "338312FA-C3D1–183F-325A-0726AFDBEB78"
+    characteristic_uuid = "15171002-4947-11E9-8646-D663BD873D93"
 
-my_adapter = list(adapter.Adapter.available())[0]
-ble_uart = peripheral.Peripheral(adapter_address=my_adapter.address, local_name='LoRaCom1')
-ble_uart.add_service(srv_id=1, uuid="6E400001-B5A3-F393-E0A9-E50E24DCCA9E", primary=True)
-ble_uart.add_characteristic(srv_id=1, chr_id=1,
-                            uuid="6E400002-B5A3-F393-E0A9-E50E24DCCA9E",
-                            value=[], notifying=True,
-                            flags=["read", "notify"])
-ble_uart.add_characteristic(srv_id=1, chr_id=2,
-                            uuid="6E400003-B5A3-F393-E0A9-E50E24DCCA9E",
-                            value=[], notifying=False,
-                            flags=["write-without-response"],
-                            write_callback=ble_receive)
+    async with BleakClient(ble_address) as client:
+        data = await client.read_gatt_char(characteristic_uuid)
+        print(data)
 
-display_message(["Bluetooth ready", "Waiting for messages..."])
-
-ble_uart.publish()
+asyncio.run(ble_receive())
 
 while True:
     time.sleep(1)
