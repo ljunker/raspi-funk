@@ -6,6 +6,7 @@ import board
 import busio
 import serial
 from PIL import Image, ImageDraw, ImageFont
+from bluezero import peripheral
 
 #i2c = busio.I2C(board.SCL, board.SDA)
 #oled_width = 128
@@ -27,17 +28,6 @@ def display_message(lines):
     # Placeholder function for displaying messages
     print("\n".join(lines))
 
-bluetooth_connected = False
-while not bluetooth_connected:
-    try:
-        bluetooth_serial = serial.Serial('/dev/rfcomm0', baudrate=9600, timeout=1)
-        bluetooth_connected = True
-    except serial.SerialException:
-        display_message(["Connecting to Bluetooth...", "Retrying..."])
-        time.sleep(1)
-
-display_message(["Bluetooth connected!", "Ready to receive data."])
-
 device_ids = ["Alpha", "Bravo", "Charlie"]
 selected_index = 0
 my_id = "Delta"
@@ -52,16 +42,26 @@ def update_display():
     ]
     display_message(lines)
 
-def listen_bluetooth():
+def ble_receive(value):
     global last_message
-    while True:
-        if bluetooth_serial.in_waiting:
-            msg = bluetooth_serial.readline().decode('utf-8').strip()
-            if msg:
-                last_message = msg
-                update_display()
+    last_message = value.decode("utf-8")
+    update_display()
 
-threading.Thread(target=listen_bluetooth, daemon=True).start()
+ble_uart = peripheral.Peripheral(adapter_addr=None, local_name='LoRaCom1')
+ble_uart.add_service(srv_id=1, uuid="6E400001-B5A3-F393-E0A9-E50E24DCCA9E", primary=True)
+ble_uart.add_characteristic(srv_id=1, chr_id=1,
+                            uuid="6E400002-B5A3-F393-E0A9-E50E24DCCA9E",
+                            value=[], notifying=True,
+                            flags=["read", "notify"])
+ble_uart.add_characteristic(srv_id=1, chr_id=2,
+                            uuid="6E400003-B5A3-F393-E0A9-E50E24DCCA9E",
+                            value=[], notifying=False,
+                            flags=["write-without-response"],
+                            write_callback=ble_receive)
+
+display_message(["Bluetooth ready", "Waiting for messages..."])
+
+threading.Thread(target=ble_uart.run, daemon=True).start()
 
 while True:
     time.sleep(1)

@@ -2,3 +2,4 @@ adafruit-circuitpython-rfm9x
 adafruit-circuitpython-ssd1306
 adafruit-blinka
 pillow
+bluezero
