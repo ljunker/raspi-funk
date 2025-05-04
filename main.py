@@ -13,7 +13,7 @@ try:
 except ImportError:
     import gobject as GObject
 
-from gatt_server.gatt_server import Characteristic, Service, Application
+import gatt_server.gatt_server
 
 
 #i2c = busio.I2C(board.SCL, board.SDA)
@@ -50,7 +50,7 @@ def update_display():
     ]
     display_message(lines)
 
-class RXCharacteristic(Characteristic):
+class RXCharacteristic(gatt_server.gatt_server.Characteristic):
     def __init__(self, service):
         super().__init__("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", ["write", "write-without-response"], service)
 
@@ -59,7 +59,7 @@ class RXCharacteristic(Characteristic):
         last_message = bytes(value).decode("utf-8")
         update_display()
 
-class UARTService(Service):
+class UARTService(gatt_server.gatt_server.Service):
     def __init__(self, index):
         super().__init__(index, "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", True)
         self.add_characteristic(RXCharacteristic(self))
