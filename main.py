@@ -63,7 +63,7 @@ ble_uart.add_characteristic(srv_id=1, chr_id=2,
 
 display_message(["Bluetooth ready", "Waiting for messages..."])
 
-threading.Thread(target=ble_uart.run, daemon=True).start()
+ble_uart.publish()
 
 while True:
     time.sleep(1)
