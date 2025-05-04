@@ -7,7 +7,10 @@ import board
 import busio
 import serial
 from PIL import Image, ImageDraw, ImageFont
-from bleak import BleakClient
+from dbus.mainloop.glib import DBusGMainLoop
+from gi.overrides.GObject import GObject
+
+from gatt_server.gatt_server import Characteristic, Service, Application
 
 
 #i2c = busio.I2C(board.SCL, board.SDA)
@@ -44,15 +47,25 @@ def update_display():
     ]
     display_message(lines)
 
-async def ble_receive():
-    ble_address = "338312FA-C3D1–183F-325A-0726AFDBEB78"
-    characteristic_uuid = "15171002-4947-11E9-8646-D663BD873D93"
+class RXCharacteristic(Characteristic):
+    def __init__(self, service):
+        super().__init__("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", ["write", "write-without-response"], service)
 
-    async with BleakClient(ble_address) as client:
-        data = await client.read_gatt_char(characteristic_uuid)
-        print(data)
+    def WriteValue(self, value, options):
+        global last_message
+        last_message = bytes(value).decode("utf-8")
+        update_display()
 
-asyncio.run(ble_receive())
+class UARTService(Service):
+    def __init__(self, index):
+        super().__init__(index, "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", True)
+        self.add_characteristic(RXCharacteristic(self))
 
-while True:
-    time.sleep(1)
+DBusGMainLoop(set_as_default=True)
+app = Application()
+uart_service = UARTService(0)
+app.add_service(uart_service)
+app.register()
+
+mainloop = GObject.MainLoop()
+mainloop.run()

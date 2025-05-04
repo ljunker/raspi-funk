@@ -3,4 +3,3 @@ adafruit-circuitpython-ssd1306
 adafruit-blinka
 pillow
 dbus-python
-bleak
