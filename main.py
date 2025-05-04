@@ -1,19 +1,4 @@
-import asyncio
-import threading
-import time
-
-import adafruit_ssd1306
-import board
-import busio
-import serial
-from PIL import Image, ImageDraw, ImageFont
-from dbus.mainloop.glib import DBusGMainLoop
-try:
-    from gi.repository import GObject
-except ImportError:
-    import gobject as GObject
-
-import gatt_server.gatt_server
+from flask import Flask, request, render_template_string
 
 
 #i2c = busio.I2C(board.SCL, board.SDA)
@@ -50,25 +35,33 @@ def update_display():
     ]
     display_message(lines)
 
-class RXCharacteristic(gatt_server.gatt_server.Characteristic):
-    def __init__(self, service):
-        super().__init__("6E400002-B5A3-F393-E0A9-E50E24DCCA9E", ["write", "write-without-response"], service)
+app = Flask(__name__)
 
-    def WriteValue(self, value, options):
-        global last_message
-        last_message = bytes(value).decode("utf-8")
-        update_display()
+HTML_PAGE = """
+<!doctype html>
+<title>LoRa-Kommunikator</title>
+<h2>Text an Gerät senden</h2>
+<form method=post>
+  <input type=text name=message autofocus>
+  <input type=submit value=Senden>
+</form>
+<p>{{ feedback }}</p>
+"""
 
-class UARTService(gatt_server.gatt_server.Service):
-    def __init__(self, index):
-        super().__init__(index, "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", True)
-        self.add_characteristic(RXCharacteristic(self))
+@app.route("/", methods=["GET", "POST"])
+def index():
+    global last_message
+    feedback = ""
+    if request.method == "POST":
+        msg = request.form.get("message", "").strip()
+        if msg:
+            last_message = msg
+            update_display()
+            feedback = "Nachricht gespeichert."
+    return render_template_string(HTML_PAGE, feedback=feedback)
 
-DBusGMainLoop(set_as_default=True)
-app = Application()
-uart_service = UARTService(0)
-app.add_service(uart_service)
-app.register()
+# ---------------- MAIN ---------------- #
+if __name__ == '__main__':
+    display_message(["Kommunikator bereit."])
 
-mainloop = GObject.MainLoop()
-mainloop.run()
+    app.run(host="0.0.0.0", port=8080)
