@@ -8,7 +8,10 @@ import busio
 import serial
 from PIL import Image, ImageDraw, ImageFont
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.overrides.GObject import GObject
+try:
+    from gi.repository import GObject
+except ImportError:
+    import gobject as GObject
 
 from gatt_server.gatt_server import Characteristic, Service, Application
 
