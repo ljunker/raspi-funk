@@ -61,7 +61,3 @@ LORACOM_DEBUG=1 python3 main.py
 ```
 
 Dadurch werden GPIO, I2C, SPI und WLAN deaktiviert bzw. simuliert.
-
----
-
-Bei Fragen oder zur Erweiterung (BLE, Audio etc.) gerne weiterentwickeln 🚀
