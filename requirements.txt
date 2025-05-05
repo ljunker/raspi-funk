@@ -3,3 +3,4 @@ adafruit-circuitpython-ssd1306
 adafruit-blinka
 pillow
 flask
+RPi.GPIO
