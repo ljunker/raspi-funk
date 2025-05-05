@@ -4,13 +4,13 @@ Ein tragbares Kommunikationsgerät mit LoRa, OLED-Display, Tastern und WLAN-Inte
 
 ## 🔧 Verwendete Bauteile
 
-| Bauteil                    | Beschreibung                       |
-| -------------------------- | ---------------------------------- |
-| Raspberry Pi Zero W        | Zentrale Steuereinheit             |
-| RFM9x LoRa-Modul (868 MHz) | Funkmodul für LoRa-Kommunikation   |
-| SSD1306 OLED (128x64)      | Anzeige über I2C                   |
-| 2x Taster                  | Navigation (GPIO)                  |
-| Widerstände 10kΩ           | Pull-down bei Bedarf               |
+| Bauteil                    | Beschreibung                |
+| -------------------------- | --------------------------- |
+| Raspberry Pi Zero W        | Zentrale Steuereinheit      |
+| RFM9x LoRa-Modul (868 MHz) | Funkmodul für LoRa-Kommunikation |
+| SSD1306 OLED (128x64)      | Anzeige über I2C            |
+| 2x Taster                  | Navigation                  |
+| Widerstände 10kΩ           | Pull-down bei Bedarf        |
 | Stromversorgung            | z. B. über Powerbank via Micro-USB |
 
 ## ⚙️ GPIO-Verdrahtung
