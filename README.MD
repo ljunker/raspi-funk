@@ -52,9 +52,9 @@ Ein tragbares Kommunikationsgerät mit LoRa, OLED-Display, Tastern und WLAN-Inte
 * 🖲️ Taster zur Auswahl des Empfängers
 * 🖋️ Texteingabe über Weboberfläche: `http://<IP>:8080`
 
-## 🧪 Debug-Modus (Mac-kompatibel)
+## 🧪 Debug-Modus
 
-Zum lokalen Testen auf dem Mac ohne Hardware:
+Zum lokalen Testen auf dem pc ohne Hardware:
 
 ```bash
 LORACOM_DEBUG=1 python3 main.py
