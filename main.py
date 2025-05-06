@@ -22,6 +22,6 @@ if __name__ == '__main__':
         threading.Thread(target=handle_buttons, daemon=True).start()
         threading.Thread(target=listen_lora, daemon=True).start()
         threading.Thread(target=broadcast_loop, daemon=True).start()
-        threading.Thread(target=cleanup_loop, daemon=True).start()
+    threading.Thread(target=cleanup_loop, daemon=True).start()
 
     app.run(host="0.0.0.0", port=8080)

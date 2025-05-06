@@ -4,7 +4,7 @@ from variables import get_known_devices, get_selected_index, get_my_id, get_last
 
 IS_DEBUG = os.getenv("LORACOM_DEBUG", "0") == "1"
 
-if not IS_DEBUG:
+if not IS_DEBUG and False:
     import board
     import busio
     import adafruit_ssd1306
@@ -19,7 +19,7 @@ font = None
 
 def init_display():
     global oled, draw, image, font
-    if IS_DEBUG:
+    if IS_DEBUG or True:
         print("Display initialisieren (Debug-Modus)")
         return
     i2c = busio.I2C(board.SCL, board.SDA)
@@ -30,7 +30,7 @@ def init_display():
 
 
 def display_lines(lines):
-    if IS_DEBUG:
+    if IS_DEBUG or True:
         print("[DISPLAY]", "\n", "\n".join(lines))
         return
     draw.rectangle((0, 0, 128, 64), outline=0, fill=0)

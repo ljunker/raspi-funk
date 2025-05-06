@@ -2,7 +2,7 @@ import time
 import os
 IS_DEBUG = os.getenv("LORACOM_DEBUG", "0") == "1"
 
-if not IS_DEBUG:
+if not IS_DEBUG and False:
     import RPi.GPIO as GPIO
     from display import update_display
     from lora import known_devices, selected_index, last_message, send_message
@@ -16,7 +16,7 @@ if not IS_DEBUG:
 
 def handle_buttons():
     global selected_index
-    if IS_DEBUG:
+    if IS_DEBUG or True:
         print("Buttons initialisieren (Debug-Modus)")
         return
     while True:
