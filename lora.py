@@ -5,7 +5,7 @@ from display import update_display
 from variables import set_my_id, get_my_id, get_known_devices, set_last_message, get_selected_index, set_selected_index
 
 IS_DEBUG = os.getenv("LORACOM_DEBUG", "0") == "1"
-if not IS_DEBUG and False:
+if not IS_DEBUG:
     import board
     import busio
     import digitalio
@@ -24,7 +24,7 @@ def init_lora():
         set_my_id("DEV-" + str(uuid.uuid4())[:8])
         with open(id_file, "w") as f:
             f.write(get_my_id())
-    if IS_DEBUG or True:
+    if IS_DEBUG:
         print("LoRa initialisieren (Debug-Modus)")
         return
     spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
@@ -39,7 +39,7 @@ def send_message(msg):
         return
     target = ids[get_selected_index()]
     packet = f"{target}|{get_my_id()}|{msg}"
-    if IS_DEBUG or True:
+    if IS_DEBUG:
         print("LoRa senden (Debug-Modus):", packet)
         return
     rfm9x.send(packet.encode("utf-8"))
@@ -47,7 +47,7 @@ def send_message(msg):
 
 
 def listen_lora():
-    if IS_DEBUG or True:
+    if IS_DEBUG:
         print("LoRa empfangen (Debug-Modus)")
         return
     while True:
@@ -55,6 +55,7 @@ def listen_lora():
         if packet:
             try:
                 decoded = packet.decode("utf-8")
+                print("Empfangen:", decoded)
                 to_id, from_id, msg = decoded.split("|", 2)
                 if to_id == "BROADCAST":
                     get_known_devices()[from_id] = time.time()
@@ -67,7 +68,7 @@ def listen_lora():
 
 
 def broadcast_loop():
-    if IS_DEBUG or True:
+    if IS_DEBUG:
         print("LoRa Broadcast (Debug-Modus)")
         return
     while True:
