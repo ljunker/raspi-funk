@@ -1,11 +1,14 @@
 import time
 import os
+
+from lora import send_message
+from variables import get_known_devices, get_message
+
 IS_DEBUG = os.getenv("LORACOM_DEBUG", "0") == "1"
 
 if not IS_DEBUG and False:
     import RPi.GPIO as GPIO
     from display import update_display
-    from lora import known_devices, selected_index, last_message, send_message
 
     BUTTON_NEXT = 17
     BUTTON_SELECT = 27
@@ -21,11 +24,11 @@ def handle_buttons():
         return
     while True:
         if GPIO.input(BUTTON_NEXT) == GPIO.LOW:
-            ids = sorted(known_devices.keys())
+            ids = sorted(get_known_devices().keys())
             if ids:
                 selected_index = (selected_index + 1) % len(ids)
             update_display()
             time.sleep(0.3)
         elif GPIO.input(BUTTON_SELECT) == GPIO.LOW:
-            send_message(last_message)
+            send_message(get_message())
             time.sleep(0.3)
