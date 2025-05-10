@@ -43,7 +43,7 @@ def display_lines(lines):
 def update_display():
     ids = sorted(get_known_devices().keys())
     current_target = ids[get_selected_index()] if ids else "<keine>"
-    msg = get_message() if get_message() else " - "
+    msg = get_last_message() if get_last_message() else " - "
     blocks = [msg[i:i+20] for i in range(0, len(msg), 20)]
     display_lines([
         f"Ziel: {current_target}",
