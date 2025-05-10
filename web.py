@@ -52,5 +52,5 @@ def send_message_with_display(msg):
     # put the message in 20 char blocks:
     blocks = [msg[i:i+20] for i in range(0, len(msg), 20)]
     display_lines(blocks)
-    send_message(msg)
     time.sleep(3)
+    send_message(msg)
