@@ -9,7 +9,7 @@ HTML_PAGE = """
 <!doctype html>
 <title>LoRaCom</title>
 <h2>Nachricht senden</h2>
-<form method=post>
+<form method=post action="/">
   <input name=message type=text autofocus>
   <input type=submit value=Senden>
 </form>
@@ -43,4 +43,5 @@ def set_id():
                 f.write(new_id)
             feedback = f"Kennung gesetzt: {new_id}"
             update_display()
+
     return render_template_string(HTML_PAGE, feedback=feedback)
