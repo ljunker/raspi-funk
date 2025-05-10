@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template_string
 from display import update_display
 from lora import send_message
-from variables import set_message
+from variables import set_message, set_my_id
 
 app = Flask(__name__)
 
@@ -38,7 +38,7 @@ def set_id():
     if request.method == "POST":
         new_id = request.form.get("kennung", "").strip()
         if new_id:
-            set_id(new_id)
+            set_my_id(new_id)
             with open("kennung.txt", "w") as f:
                 f.write(new_id)
             feedback = f"Kennung gesetzt: {new_id}"
