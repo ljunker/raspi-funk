@@ -19,7 +19,7 @@ font = None
 
 def init_display():
     global oled, draw, image, font
-    if IS_DEBUG or True:
+    if IS_DEBUG:
         print("Display initialisieren (Debug-Modus)")
         return
     i2c = busio.I2C(board.SCL, board.SDA)
@@ -30,7 +30,7 @@ def init_display():
 
 
 def display_lines(lines):
-    if IS_DEBUG or True:
+    if IS_DEBUG:
         print("[DISPLAY]", "\n", "\n".join(lines))
         return
     draw.rectangle((0, 0, 128, 64), outline=0, fill=0)

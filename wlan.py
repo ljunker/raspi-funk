@@ -1,7 +1,7 @@
 import time
 import os
 IS_DEBUG = os.getenv("LORACOM_DEBUG", "0") == "1"
-if not IS_DEBUG:
+if not IS_DEBUG and False:
     import subprocess
     import RPi.GPIO as GPIO
     from display import display_lines
@@ -14,7 +14,7 @@ if not IS_DEBUG:
 
 
 def scan_networks():
-    if IS_DEBUG:
+    if IS_DEBUG or True:
         print("WLAN scannen (Debug-Modus)")
         return ["TestNetz1", "TestNetz2"]
     result = subprocess.run(["sudo", "iwlist", "wlan0", "scan"], capture_output=True, text=True)
@@ -29,14 +29,14 @@ def scan_networks():
 
 
 def connect_to(ssid):
-    if IS_DEBUG:
+    if IS_DEBUG or True:
         print("Mit WLAN verbinden (Debug-Modus):", ssid)
         return
     subprocess.run(["sudo", "nmcli", "device", "wifi", "connect", ssid], check=False)
 
 
 def wlan_setup():
-    if IS_DEBUG:
+    if IS_DEBUG or True:
         print("WLAN-Setup (Debug-Modus)")
         return
     networks = scan_networks()
