@@ -1,5 +1,7 @@
+import time
+
 from flask import Flask, request, render_template_string
-from display import update_display
+from display import update_display, display_lines
 from lora import send_message
 from variables import set_message, set_my_id
 
@@ -27,7 +29,7 @@ def index():
         msg = request.form.get("message", "").strip()
         if msg:
             set_message(msg)
-            send_message(msg)
+            send_message_with_display(msg)
             update_display()
             feedback = "Nachricht gespeichert."
     return render_template_string(HTML_PAGE, feedback=feedback)
@@ -45,3 +47,10 @@ def set_id():
             update_display()
 
     return render_template_string(HTML_PAGE, feedback=feedback)
+
+def send_message_with_display(msg):
+    # put the message in 20 char blocks:
+    blocks = [msg[i:i+20] for i in range(0, len(msg), 20)]
+    display_lines(blocks)
+    send_message(msg)
+    time.sleep(3)
