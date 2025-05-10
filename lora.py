@@ -77,11 +77,13 @@ def broadcast_loop():
 def update_known_devices():
     now = time.time()
     device_ids = sorted(get_known_devices().keys())
+    old_length = len(device_ids)
     current_target = device_ids[get_selected_index()] if device_ids else "<keine>"
     expired = [k for k, t in get_known_devices().items() if now - t > 60]
     for k in expired:
         del get_known_devices()[k]
-    update_device_list(current_target)
+    if len(get_known_devices()) != old_length:
+        update_device_list(current_target)
 
 def update_device_list(current_target):
     device_ids = sorted(get_known_devices().keys())
