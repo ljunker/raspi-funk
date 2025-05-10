@@ -4,7 +4,7 @@ from variables import get_known_devices, get_selected_index, get_my_id, get_last
 
 IS_DEBUG = os.getenv("LORACOM_DEBUG", "0") == "1"
 
-if not IS_DEBUG and False:
+if not IS_DEBUG:
     import board
     import busio
     import adafruit_ssd1306
